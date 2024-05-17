@@ -1,10 +1,10 @@
 import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
 
 let page = 1;
-let matches = books
+let matches = books;
 
 // Function to create book preview elements
-const createBookPreview = ({ author, id, image, tittle}) => {
+const createBookPreview = ({ author, id, image, title}) => {
     const element = document.createElement('button');
     element.classList = 'preview';
     element.setAttribute('data-preview', id);
@@ -12,8 +12,8 @@ const createBookPreview = ({ author, id, image, tittle}) => {
     element.innerHTML = `
        <img class="preview__image" src="${image}" />
        <div class="preview__info">
-           <h3 class="preview__title">${title}<?h3>
-           <div class="preview__author">${authors[author]}<?div>
+           <h3 class="preview__title">${title}</h3>
+           <div class="preview__author">${authors[author]}</div>
        </div>
     `;
 
@@ -25,7 +25,7 @@ const starting = document.createDocumentFragment();
 for (const book of matches.slice(0, BOOKS_PER_PAGE)) {
     starting.appendChild(createBookPreview(book));
 }
-document.querySelector('{data-list-items]').appendChild(starting);
+document.querySelector('[data-list-items]').appendChild(starting);
 // Function to create and append options to a select element
 const populateSelect = (select, options, defaultOption) => {
     const fragment = document.createDocumentFragment();
@@ -34,7 +34,7 @@ const populateSelect = (select, options, defaultOption) => {
     firstElement.innerText = defaultOption;
     fragment.appendChild(firstElement);
 
-    for (const [id, name] of Object.entries('options')) {
+    for (const [id, name] of Object.entries(options)) {
         const element = document.createElement('option');
         element.value = id;
         element.innerText = name;
@@ -59,7 +59,7 @@ const setTheme = (theme) => {
 };
 
 const prefersDarkScheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-document.querySelector('[data-setteings-theme]').value = prefersDarkScheme ? 'night' : 'day';
+document.querySelector('[data-settings-theme]').value = prefersDarkScheme ? 'night' : 'day';
 setTheme(prefersDarkScheme ? 'night' :  'day');
 
 // Update "Show more" button text and state
@@ -94,11 +94,11 @@ document.querySelector('[data-header-settings]').addEventListener('click', () =>
     document.querySelector('[data-setting-overlay]').open = true;
 });
 
-document.querySelector('[data-list-close]').addEventListerner('click', () => {
+document.querySelector('[data-list-close]').addEventListener('click', () => {
     document.querySelector('[data-list-active]').open = false;
 });
 
-document.querySelector('[data-settings-form]').addEventListener('submit', (events) => {
+document.querySelector('[data-settings-form]').addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const { theme } = Object.fromEntries(formData);
@@ -106,12 +106,12 @@ document.querySelector('[data-settings-form]').addEventListener('submit', (event
     document.querySelector('[data-settings-overlay]').open = false;
 });
 
-document.querySelector('[data-serach-form]').addEventListener('submit', (event) => {
+document.querySelector('[data-search-form]').addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const filters = Object.fromEntries(formData);
     const result = books.filter(book => {
-        const genreMatch = filters.genre === 'any' || book.genre.invludes(filters.genre);
+        const genreMatch = filters.genre === 'any' || book.genre.includes(filters.genre);
         const titleMatch = filters.title.trim() === '' || book.title.toLowerCase().includes(filters.title.toLowerCase());
         const authorMatch = filters.author === 'any' || book.author === filters.author;
         return genreMatch && titleMatch && authorMatch;
@@ -119,14 +119,14 @@ document.querySelector('[data-serach-form]').addEventListener('submit', (event) 
 
     page = 1;
     matches = result;
-    document.querySelector('[data-list-message]').classlist.toggle('list__message_show', result.length < 1);
+    document.querySelector('[data-list-message]').classList.toggle('list__message_show', result.length < 1);
 
-    const newItems = document.creatDocumentFragment();
-    for (const book of result.slice(0, BOOK_PER_PAGE)) {
+    const newItems = document.createDocumentFragment();
+    for (const book of result.slice(0, BOOKS_PER_PAGE)) {
         newItems.appendChild(createBookPreview(book));
     }
     document.querySelector('[data-list-items]').innerHTML = '';
-    document.querySelector('[data-list-items]').appenChild(newItems);
+    document.querySelector('[data-list-items]').appendChild(newItems);
 
     updateShowMoreButton();
     window.scrollTo({ top: 0, behavior: 'smooth'});
@@ -147,7 +147,7 @@ document.querySelector('[data-list-button]').addEventListener('click', () => {
     updateShowMoreButton();
 });
 
-document.querSelector('[data-list-items]').addEventListener('click', (event) => {
+document.querySelector('[data-list-items]').addEventListener('click', (event) => {
     const pathArray = Array.from(event.composedPath());
     let active = null;
 
