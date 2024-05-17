@@ -3,6 +3,24 @@ import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
 let page = 1;
 let matches = books
 
+// Function to create book preview elements
+const createBookPreview = ({ author, id, image, tittle}) => {
+    const element = document.createElement('button');
+    element.classList = 'preview';
+    element.setAttribute('data-preview', id);
+
+    element.innerHTML = `
+       <img class="preview__image" src="${image}" />
+       <div class="preview__info">
+           <h3 class="preview__title">${title}<?h3>
+           <div class="preview__author">${authors[author]}<?div>
+       </div>
+    `;
+
+    return element;
+};
+
+
 const starting = document.createDocumentFragment()
 
 for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
