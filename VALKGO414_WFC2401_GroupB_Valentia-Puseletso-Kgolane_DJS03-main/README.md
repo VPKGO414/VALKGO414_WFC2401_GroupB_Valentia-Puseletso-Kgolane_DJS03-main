@@ -1,39 +1,109 @@
-# DJS03 Project Brief: Book Connect - Abstractions
+###DJS03: BOOK CONNECT - ABSTRACTIONS
 
-Dive into the delightful world of "Book Connect," where literary adventures await at your fingertips! Browse, explore, and uncover your next great read from a vast, vibrant collection. Whether you're a fan of thrilling mysteries, epic fantasies, or heartwarming romances, "Book Connect" brings the magic of books directly to you. Happy reading! 
+#Book Connect Refractoring
 
-The "Book Connect" project provides an opportunity for students to refine a fully functional version of an application. The focus of this project is to enhance the code's maintainability, extendibility, and readability by applying concepts of objects and functions for abstraction. This will not only streamline future modifications but also consolidate students' understanding of higher-level programming concepts, including documentation, Styleguides, and abstraction principles.
+##Overview
 
-![alt text](image.png)
+This document outlines the factoring process for the "Book Connect" application. It highlights the changes made to improve maintainability, extenfibility, and readability by applying concepts of objects and functions for abstraction.
 
-#### Goals
+##Issues
 
-- **Refactor Existing Code**: Analyse and refactor the given JavaScript and HTML code to improve its structure using objects and functions.
-- **Implement Abstraction**: Use abstraction to hide the complex reality while exposing only the necessary parts. This involves creating more generic functions that can perform tasks in a more flexible way.
-- **Documentation**: Write clear comments and documentation for the new code structure to explain the purpose and functionality of code blocks, functions, and objects.
-- **Follow Styleguides**: Adhere to established coding conventions and Styleguides to ensure code readability and maintainability.
+**Code Duplication:**
+Several parts of the code cotained repetitive blocks, making the codebase harder to maintain and update.
 
-#### Tasks
+**Lack of Abstraction:**
+The original code did not have adequately utilize objects and functins for abstraction, leading to a more complex and less flexible code structure.
 
-1. **Code Analysis**: Start by understanding the current implementation of the "Book Connect" application, including its HTML structure and JavaScript functionality.
-2. **Plan Refactoring**: Identify sections of the code that can be made more abstract and modular. Look for patterns and repetitive code that can be simplified.
-3. **Implement Abstraction**:
-   - **Objects**: Define objects to represent key elements of the application, such as books, authors, and genres. Utilise the provided data (e.g., `authors`, `genres`, `books`) to populate these objects.
-   - **Functions**: Create functions that handle repetitive tasks, such as rendering the book list, handling user interactions, and applying filters.
-4. **Enhance Functionality**: Ensure that the application remains fully functional after refactoring. Test all features to confirm that users can still search, filter, and view books as intended.
-5. **Documentation and Comments**: Throughout the refactoring process, document your code. Provide comments that explain the purpose and functionality of objects and functions.
-6. **Adherence to Styleguides**: Ensure your code follows JavaScript and HTML coding standards and best practices for readability and maintainability.
+**Event Handling:**
+Event listeners were added inline, leading to potential issues with readability and maintainability.
 
-#### Discussion and Reflection
+**Theme Handling:**
+Theme switching logic was embedded within multiple parts of the code, reducing readability and making future updates more complex.
 
-After completing the tasks, prepare a brief presentation for your coaching group on the following:
-- The rationale behind the refactoring decisions made, including the choice of objects and functions.
-- How abstraction has made the code more maintainable and extendable.
-- Any challenges faced during the refactoring process and how they were overcome.
-- Reflections on how this exercise has deepened your understanding of JavaScript programming concepts.
+**Select Options Population:**
+The population of select elements for genres and authors was repetitive and not abstracted into reusable functions.
 
-#### Submission Guidelines
+##Issues Addressed
 
-Submit the refactored version of the "Book Connect" application, including all HTML, CSS, and JavaScript files. Ensure that your code is well-documented and adheres to the specified Styleguides. Include a written report covering the discussion and reflection points outlined above.
+**Code Duplication:**
+Repetative code blocks were refactored into reusable functions, improving maintainability and readability.
+      -Example: The code to create book preview elements was repeated multiple             times. This was refractored into a single function `createBookPreview`.
+     
+const createBookPreview = ({ author, id, image, title }) => {
+   const element = document.createElement('button');
+   element.classList = 'preview';
+   element.setAttribute('data-preview', id);
 
-Make sure to submit your project to the LMS on the DJS03 Project Tab.
+   element.innerHTML = `
+      <img class="preview__image" src="${image}" />
+      <div class="preview__info">
+          <h3 class="preview__title">${title}</h3>
+          <div class="preview__author">${authors[author]}</div>
+      </div>
+   `;
+
+   return element;
+   };
+
+**Lack of Abstraction:**
+I created functions and utilized objects to abstract and encapsulate code logic, making the codebase more modular and extendable.
+
+**Event Handling:**
+I organized the event listeners into clearly defined functions to enhance readability and maintainability.
+      -Example: Event listeners were previously added directly within inline event        handlers. SO now they are organized into functions.
+
+ document.querySelector('[data-search-cancel]').addEventListener('click', () => {
+    document.querySelector('[data-search-overlay]').open = false;
+});
+
+document.querySelector('[data-settings-cancel]').addEventListener('click', () => {
+    document.querySelector('[data-settings-overlay]').open = false;
+});
+
+**Theme Handling:**
+Centralized theme switching logic into a dedicated function simplifying future modifications.
+      -Example: Theme switching logic was scattered and is now centralized in the         `setTheme` function.
+
+const setTheme = (theme) => {
+    if (theme === 'night') {
+        document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
+        document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+    } else {
+        document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
+        document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+    }
+};
+
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    setTheme('night');
+} else {
+    setTheme('day');
+}
+
+**Select Options Population:**
+I have abstracted the population of select options into a reusable functon, reducing redundancy.
+      -Example: Previously, options for select elements were populated with               repetitive code. This was refactored into the `populateSelect` function.
+
+const populateSelect = (select, options, defaultOption) => {
+    const fragment = document.createDocumentFragment();
+    const firstElement = document.createElement('option');
+    firstElement.value = 'any';
+    firstElement.innerText = defaultOption;
+    fragment.appendChild(firstElement);
+
+    for (const [id, name] of Object.entries(options)) {
+        const element = document.createElement('option');
+        element.value = id;
+        element.innerText = name;
+        fragment.appendChild(element);
+    }
+
+    select.appendChild(fragment);
+};
+
+populateSelect(document.querySelector('[data-search-genres]'), genres, 'All Genres');
+populateSelect(document.querySelector('[data-search-authors]'), authors, 'All Authors');
+
+##Summary of the Refactoring Process
+The refactoring process involved restructuring the codebase to incorporate the aforementioned improvements. The updated code now boats a modular structure with reusable functions, making it easier to understand, maintain and extend.
+      
