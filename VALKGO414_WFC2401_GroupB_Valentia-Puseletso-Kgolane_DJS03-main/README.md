@@ -27,8 +27,9 @@ The population of select elements for genres and authors was repetitive and not 
 
 **Code Duplication:**
 Repetative code blocks were refactored into reusable functions, improving maintainability and readability.
-      -Example: The code to create book preview elements was repeated multiple             times. This was refractored into a single function `createBookPreview`.
+      -Example: The code to create book preview elements was repeated multiple times. This was refractored into a single function `createBookPreview`.
      
+
 const createBookPreview = ({ author, id, image, title }) => {
    const element = document.createElement('button');
    element.classList = 'preview';
@@ -50,7 +51,7 @@ I created functions and utilized objects to abstract and encapsulate code logic,
 
 **Event Handling:**
 I organized the event listeners into clearly defined functions to enhance readability and maintainability.
-      -Example: Event listeners were previously added directly within inline event        handlers. SO now they are organized into functions.
+      -Example: Event listeners were previously added directly within inline eventhandlers. SO now they are organized into functions.
 
  document.querySelector('[data-search-cancel]').addEventListener('click', () => {
     document.querySelector('[data-search-overlay]').open = false;
@@ -103,6 +104,7 @@ const populateSelect = (select, options, defaultOption) => {
 
 populateSelect(document.querySelector('[data-search-genres]'), genres, 'All Genres');
 populateSelect(document.querySelector('[data-search-authors]'), authors, 'All Authors');
+
 
 ##Summary of the Refactoring Process
 The refactoring process involved restructuring the codebase to incorporate the aforementioned improvements. The updated code now boats a modular structure with reusable functions, making it easier to understand, maintain and extend.
