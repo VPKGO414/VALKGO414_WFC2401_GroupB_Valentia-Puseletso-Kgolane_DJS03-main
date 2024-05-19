@@ -30,21 +30,21 @@ Repetative code blocks were refactored into reusable functions, improving mainta
       -Example: The code to create book preview elements was repeated multiple times. This was refractored into a single function `createBookPreview`.
      
 
-const createBookPreview = ({ author, id, image, title }) => {
-   const element = document.createElement('button');
-   element.classList = 'preview';
-   element.setAttribute('data-preview', id);
+    const createBookPreview = ({ author, id, image, title }) => {
+       const element = document.createElement('button');
+       element.classList = 'preview';
+       element.setAttribute('data-preview', id);
 
-   element.innerHTML = `
+    element.innerHTML = `
       <img class="preview__image" src="${image}" />
       <div class="preview__info">
           <h3 class="preview__title">${title}</h3>
           <div class="preview__author">${authors[author]}</div>
       </div>
-   `;
+    `;
 
-   return element;
-   };
+    return element;
+    };
 
 **Lack of Abstraction:**
 I created functions and utilized objects to abstract and encapsulate code logic, making the codebase more modular and extendable.
@@ -53,19 +53,19 @@ I created functions and utilized objects to abstract and encapsulate code logic,
 I organized the event listeners into clearly defined functions to enhance readability and maintainability.
       -Example: Event listeners were previously added directly within inline eventhandlers. SO now they are organized into functions.
 
- document.querySelector('[data-search-cancel]').addEventListener('click', () => {
-    document.querySelector('[data-search-overlay]').open = false;
-});
+    document.querySelector('[data-search-cancel]').addEventListener('click', () => {
+        document.querySelector('[data-search-overlay]').open = false;
+    });
 
-document.querySelector('[data-settings-cancel]').addEventListener('click', () => {
-    document.querySelector('[data-settings-overlay]').open = false;
-});
+    document.querySelector('[data-settings-cancel]').addEventListener('click', () => {
+        document.querySelector('[data-settings-overlay]').open = false;
+    });
 
 **Theme Handling:**
 Centralized theme switching logic into a dedicated function simplifying future modifications.
-      -Example: Theme switching logic was scattered and is now centralized in the         `setTheme` function.
+      -Example: Theme switching logic was scattered and is now centralized in the `setTheme` function.
 
-const setTheme = (theme) => {
+    const setTheme = (theme) => {
     if (theme === 'night') {
         document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
         document.documentElement.style.setProperty('--color-light', '10, 10, 20');
@@ -73,19 +73,19 @@ const setTheme = (theme) => {
         document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
         document.documentElement.style.setProperty('--color-light', '255, 255, 255');
     }
-};
+    };
 
-if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     setTheme('night');
-} else {
+    } else {
     setTheme('day');
-}
+    }
 
 **Select Options Population:**
 I have abstracted the population of select options into a reusable functon, reducing redundancy.
-      -Example: Previously, options for select elements were populated with               repetitive code. This was refactored into the `populateSelect` function.
+      -Example: Previously, options for select elements were populated with repetitive code. This was refactored into the `populateSelect` function.
 
-const populateSelect = (select, options, defaultOption) => {
+    const populateSelect = (select, options, defaultOption) => {
     const fragment = document.createDocumentFragment();
     const firstElement = document.createElement('option');
     firstElement.value = 'any';
@@ -100,10 +100,10 @@ const populateSelect = (select, options, defaultOption) => {
     }
 
     select.appendChild(fragment);
-};
+    };
 
-populateSelect(document.querySelector('[data-search-genres]'), genres, 'All Genres');
-populateSelect(document.querySelector('[data-search-authors]'), authors, 'All Authors');
+    populateSelect(document.querySelector('[data-search-genres]'), genres, 'All Genres');
+    populateSelect(document.querySelector('[data-search-authors]'), authors, 'All Authors');
 
 
 ##Summary of the Refactoring Process
